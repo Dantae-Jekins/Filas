@@ -5,6 +5,7 @@
 #define POSSIBLE_VALUES 100  // Valores aplicáveis
 
 #include<math.h>
+#include<random>
 //#include<iostream>
 
 namespace Distributions

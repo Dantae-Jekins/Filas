@@ -2,9 +2,9 @@
 #include <ctime>
 #include "distribution.h"
 
-
-using namespace Distributions;
 using namespace std;
+using namespace Distributions;
+
 
 int main() {
     srand(time(NULL));
