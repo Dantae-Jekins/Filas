@@ -5,34 +5,37 @@
 using namespace std;
 using namespace Distributions;
 
-
 int main() {
-    srand(time(NULL));
+    Distributions::Normal dist_0(15, 3);
+    Distributions::Normal dist_1(25, 2);
     
-    // código de exemplo para o generated
-    Normal dist(10.0, 1);
-    float generated[300];
-    for(int i = 0; i < 300; i++)
-        generated[i] = dist.generate();
+    // Preparar dia 0
+    Simulação simul(360, dist_0, dist_1);
 
+    // Define os eventos
+    Viagem barco0(&simul, simul.time+=20);
+    Viagem barco1(&simul, simul.time+=40);
+    Viagem barco2(&simul, simul.time+=20);
+    Viagem barco3(&simul, simul.time+=40);
+    Chegada cporto0(&simul, simul.time+=5);
+    Chegada cporto1(&simul, simul.time+=5);
+    
+    // Preenche a simulação
+    simul.Porto0.barco0 = &barco0;
+    simul.Porto0.barco1 = &barco1;
+    simul.Porto1.barco0 = &barco2;
+    simul.Porto1.barco1 = &barco3;
 
-    for(int i = -7; i <= 8; i++) {
-        int count = 0;
-        for(int j = 0; j< 300; j++) {
-            if(
-                generated[j] <= (i*0.5 + 10.0) &&
-                generated[j] >= ((i-1)*0.5 + 10.0)
-                ) {
-                count++;
-            }
-        }
-        for(int j = 0; j < count; j++) {
-            cout << "|";
-        }
-        cout << endl;
-    }
-    // Fim do código de exemplo
-
-
+    //simul.insert(barcos)
+    //simul.insert(Chegada)
+    // roda
+    while(simul.dia < 20) {
+        Timed_Event *evento = simul.pop();
+        // coleta os dados
+        // realiza cálculos
+        // incrementa os tempos
+        // força saídas de barcos
+        // etc.
+    };
     return 0;
 }

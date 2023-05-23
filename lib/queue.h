@@ -11,6 +11,9 @@ struct Timed_Event_Node {
     double time;
 };
 
+// TODO NÃO DEVE CONSUMIR OS ELEMENTOS EM REMOÇÃO,
+// deixa liberação de memória pra outro canto, por
+// isso é importante RETORNAR o elemento removido.
 
 /// Uma fila que ordena a posição de seus elementos
 class Timed_Queue
@@ -31,21 +34,27 @@ class Timed_Queue
         }
 
 
-        /// @brief Remove um evento da fila
+        /// @brief Remove um evento da fila e retorna
         /// @param event O evento a ser inserido
-        void remove(Timed_Event *event) {
+        /// @return O evento removido
+        Timed_Event *remove(Timed_Event *event) {
             event->removal(); //obrigatório
+            return 0;
         }
 
 
         /// @brief Remove o primeiro elemento da fila
-        void pop() {
+        /// @return O evento removido
+        Timed_Event *pop() {
             //this->remove(this->root); exemplo
+            return 0;
         }
 
 
         /// @brief Retorna o primeiro elemento da fila
-        void top() {
+        /// @return O primeiro evento
+        Timed_Event *top() {
+            return 0;
         }
 };
 
