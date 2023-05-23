@@ -3,16 +3,12 @@
 #define PRECISION_RANGE 4    // Intervalo de desvios padrões
 #define RANDOM_QUANTITY 10000 // Números aleatórios usados
 #define POSSIBLE_VALUES 100  // Valores aplicáveis
-
 #include<math.h>
 #include<random>
-//#include<iostream>
 
 namespace Distributions
 {
-
-
-    class normal
+    class Normal
     {
     private:
 
@@ -26,7 +22,7 @@ namespace Distributions
         /// @brief Construtor da distribuição normal
         /// @param media média da distribuição
         /// @param desvio desvio da distribuição
-        normal(float media, float desvio) {
+        Normal(float media, float desvio) {
             // Prepara variáveis
             this->desvio = desvio;
             this->media = media;
@@ -64,18 +60,6 @@ namespace Distributions
             
             while(index_table < RANDOM_QUANTITY) 
                 this->table[index_table++] = 0;    
-            
-            /* demonstração
-            float val = this->table[0];
-            u_int j = 0;
-            for(u_int i = 0; i<= RANDOM_QUANTITY; i++) {
-                if (val != this-> table[i]) {
-                    std::cout << "Valor " << val << ":" << j << std::endl;
-                    val = this->table[i];
-                    j = 0;
-                }
-                j++;
-            }*/
         }
 
         /// @brief Gera um número aleatório conforme esta distribuição

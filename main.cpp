@@ -1,6 +1,6 @@
 #include <iostream>
 #include <ctime>
-#include "distribution.h"
+#include "problema.h"
 
 using namespace std;
 using namespace Distributions;
@@ -10,7 +10,7 @@ int main() {
     srand(time(NULL));
     
     // código de exemplo para o generated
-    normal dist(10.0, 1);
+    Normal dist(10.0, 1);
     float generated[300];
     for(int i = 0; i < 300; i++)
         generated[i] = dist.generate();
