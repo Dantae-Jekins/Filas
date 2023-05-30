@@ -72,7 +72,7 @@ class Viagem : public Timed_Event
         Viagem(Simulação *contexto, double tempo):Timed_Event(contexto, tempo) {}
         ~Viagem(){}
 
-        void removal() {};
+        Timed_Event *removal() {};
         void insertion() {};
 };
 
@@ -83,7 +83,7 @@ class Chegada : public Timed_Event
         Chegada(Simulação *contexto, double tempo) : Timed_Event(contexto, tempo) {}
         ~Chegada(){}
 
-        void removal() {};
+        Timed_Event *removal() {};
         void insertion() {};
 };
 

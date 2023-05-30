@@ -22,7 +22,7 @@ class Timed_Event
 
         /// @brief Função que define o comportamento
         /// ao ser removido de uma fila temporal
-        virtual void removal() = 0;
+        virtual Timed_Event *removal() = 0;
 
         /// @brief Função que define o comportamento
         /// ao ser adicionado à uma fila temporal

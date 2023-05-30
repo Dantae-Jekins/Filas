@@ -30,8 +30,8 @@ int main() {
     //simul.insert(Chegada)
     // roda
     while(simul.dia < 20) {
-        Timed_Event *evento = simul.pop();
-        // coleta os dados
+        Timed_Event *evento = simul.GetRootEvent();
+        Timed_Event *novoEvento = simul.pop();
         // realiza cálculos
         // incrementa os tempos
         // força saídas de barcos
