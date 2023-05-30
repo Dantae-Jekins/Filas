@@ -2,6 +2,8 @@
 #define QUEUE_H
 #include "event.h"
 
+using namespace std;
+
 // Define used classes
 class Timed_Event;
 struct Timed_Event_Node {
@@ -47,10 +49,12 @@ class Timed_Queue
                 return;
             }
 
-            while (aux->time < time || aux->next != NULL) {
+            while (aux->time < time) {
+                if(aux->next == NULL){
+                    break;
+                }
                 aux = aux->next;
             }
-
 
             Timed_Event_Node *tmp = aux->next;
             newNode->prev = aux;
@@ -122,6 +126,12 @@ class Timed_Queue
                 return NULL;
             }
             return this->root->content;
+        }
+
+        void ShowSim() {
+            for (Timed_Event_Node * aux = this->root; aux != NULL; aux = aux->next){
+                cout << aux->time << endl;
+            }
         }
 };
 

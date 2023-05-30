@@ -13,12 +13,12 @@ int main() {
     Simulação simul(360, dist_0, dist_1);
 
     // Define os eventos
-    Viagem barco0(&simul, simul.time+=20);
-    Viagem barco1(&simul, simul.time+=40);
-    Viagem barco2(&simul, simul.time+=20);
-    Viagem barco3(&simul, simul.time+=40);
-    Chegada cporto0(&simul, simul.time+=5);
-    Chegada cporto1(&simul, simul.time+=5);
+    Viagem barco0(&simul, simul.time+20);
+    Viagem barco1(&simul, simul.time+40);
+    Viagem barco2(&simul, simul.time+20);
+    Viagem barco3(&simul, simul.time+40);
+    Chegada cporto0(&simul, simul.time+5);
+    Chegada cporto1(&simul, simul.time+5);
     
     // Preenche a simulação
     simul.Porto0.barco0 = &barco0;
@@ -29,13 +29,32 @@ int main() {
     //simul.insert(barcos)
     //simul.insert(Chegada)
     // roda
-    while(simul.dia < 20) {
-        Timed_Event *evento = simul.GetRootEvent();
-        Timed_Event *novoEvento = simul.pop();
-        // realiza cálculos
-        // incrementa os tempos
-        // força saídas de barcos
-        // etc.
-    };
+    simul.insert(&barco0, barco0.getTime());
+    Timed_Event *evento = simul.GetRootEvent();
+    simul.insert(&barco1, barco1.getTime());
+    simul.insert(&barco2, barco2.getTime());
+    simul.insert(&barco3, barco3.getTime());
+
+    simul.ShowSim();
+
+    cout << "BATATA\n";
+
+    simul.remove(&barco0);
+
+    simul.ShowSim();
+
+    cout << "BATATA1\n";
+
+    simul.pop();
+
+    simul.ShowSim();
+
+    // while(simul.dia < 20) {
+        
+    //     // realiza cálculos
+    //     // incrementa os tempos
+    //     // força saídas de barcos
+    //     // etc.
+    // };
     return 0;
 }

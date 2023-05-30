@@ -18,6 +18,10 @@ class Timed_Event
             this->time = time;
         }
 
+        double getTime() {
+            return this->time;
+        }
+
         virtual ~Timed_Event(){}
 
         /// @brief Função que define o comportamento
