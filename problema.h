@@ -12,7 +12,8 @@ class Chegada;
 
 
 /// @brief Classe representando a simulação
-class Simulação : public Timed_Queue {
+class Simulação : public Timed_Queue 
+{
     public:
         double time;
         int pessoas[2];

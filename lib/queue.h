@@ -33,56 +33,50 @@ class Timed_Queue
         /// @param event Um objeto que herda da classe evento 
         /// @param time  Parâmetro para posicionar ordenadamente na fila
         void insert(Timed_Event *event) {
-            double time = event->get_Time();
-            Timed_Event_Node *aux = this->root;
+            Timed_Event_Node *new_Node = new Timed_Event_Node();
+            double new_time = event->get_Time();
+            new_Node->content = event;
+            new_Node->time = new_time;
 
-            Timed_Event_Node *newNode = new Timed_Event_Node();
-            newNode->content = event;
-            newNode->time = time;// == event->time
-
+            // Preenche a raiz
             if (this->root == NULL) {
-                this->root = newNode;
-                newNode->next = NULL;
-                newNode->prev = NULL;
-                event->insertion(); // obrigatório
+                this->root = new_Node;
+                new_Node->next = NULL;
+                new_Node->prev = NULL;
                 return;
             }
 
-            while (aux->time < time) {
-                if(aux->next == NULL){
-                    break;
-                }
-                aux = aux->next;
-            }
-
-            if (root->time >= aux->time) {
-                root->prev = newNode;
-                newNode->next = root;
-                newNode->prev = NULL;
-                root = newNode;
+            // Caso específico
+            if (root->time >= new_time) {
+                root->prev = new_Node;
+                new_Node->next = root;
+                new_Node->prev = NULL;
+                root = new_Node;
                 
             } else { 
+                Timed_Event_Node *aux = this->root;
+                while (aux->time <= new_time) {
+                    if(aux->next == NULL)
+                        break;
+                    aux = aux->next;
+                }   
                 Timed_Event_Node *tmp = aux->next;
-                newNode->prev = aux;
-                aux->next = newNode;
-                newNode->next = tmp;
-                if (tmp != NULL) {
-                    tmp->prev = newNode;
-                }
+                new_Node->prev = aux;
+                aux->next = new_Node;
+                new_Node->next = tmp;
+                if (tmp != NULL) 
+                    tmp->prev = new_Node;
             }
-            
-            event->insertion(); // obrigatório
         };
 
 
         /// @brief Remove um evento da fila e retorna
         /// @param event O evento a ser inserido
-        /// @return O evento removido
+        /// @return A função de remoção do evento removido
         Timed_Event *remove(Timed_Event *event) {
-            if (event == NULL || this->root == NULL) {
+            if (event == NULL || this->root == NULL) 
                 return NULL;
-            }
-
+            
             Timed_Event_Node *aux = this->root;
             while (aux->content != event) {
                 aux = aux->next;
@@ -93,33 +87,29 @@ class Timed_Queue
             
             Timed_Event_Node *tmpN = aux->next;
             Timed_Event_Node *tmpP = aux->prev;
-
             if (tmpN != NULL) tmpN->prev = tmpP;
             if (tmpP != NULL) tmpP->next = tmpN;
-
             if (aux == this->root)
                 this->root = tmpN;
 
             delete aux;
-
             return event->removal(); //obrigatório;
         };
 
 
         /// @brief Remove o primeiro elemento da fila
-        /// @return O evento removido
+        /// @return A função de remoção do evento removido
         Timed_Event *pop() {
-            if (this->root == NULL) {
+            if (this->root == NULL) 
                 return NULL;
-            }
-
+            
             Timed_Event_Node *aux = root;
             Timed_Event *aux2 = root->content;
-            if (this->root->next != NULL) {
+            if (this->root->next != NULL) 
                 root->next->prev = NULL;
-            }
-            root = root->next; // root == null
-            //this->remove(this->root); exemplo
+            
+
+            root = root->next;
             delete aux;
             return aux2->removal();
         };
@@ -128,17 +118,21 @@ class Timed_Queue
         /// @brief Retorna o primeiro elemento da fila
         /// @return O primeiro evento
         Timed_Event *top() {
-            if (this->root == NULL) {
+            if (this->root == NULL) 
                 return NULL;
-            }
+            
             return this->root->content;
         };
-/*
-        void ShowSim() {
-            for (Timed_Event_Node * aux = this->root; aux != NULL; aux = aux->next){
-                cout << aux->time << endl;
+
+
+        /// @brief Libera toda a memória e consome os eventos
+        void free() {
+            for(Timed_Event_Node *i=root, *j=root->next; i!= NULL; i = j, j=i->next) {
+                delete i->content;
+                delete i;
             }
-        }*/
+            this->root=0;
+        }
 };
 
 #endif //QUEUE_H

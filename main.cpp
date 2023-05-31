@@ -81,7 +81,7 @@ int main() {
 
         cout << simul.pessoas[0] <<" : " << time << endl;
 
-        // Altera a distribuição com base no tempo
+        // Extrai resto e inteiro da divisão
         simul.dia = (int)time/1440;
         int periodo = (int)time%1440;
         if (0 <= periodo && periodo < 360) {
@@ -115,5 +115,6 @@ int main() {
         simul.time = time;
         delete atual;
     };
+    simul.free();
     return 0;
 }
