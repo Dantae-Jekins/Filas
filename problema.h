@@ -48,47 +48,51 @@ class Viagem : public Timed_Event
     public:                                                    
         // Um anão vale por meia pessoa?
         // Se sim o tipo deveria ser "double" e não "int". 
-        Viagem(Simulação *contexto, double tempo, int estado):Timed_Event(contexto, tempo) {
+        Viagem(Simulação *contexto, double tempo, int estado, int embarcados):Timed_Event(contexto, tempo) {
             this->estado = estado;
         }
         ~Viagem(){}
 
+
+        /// @brief Retorna o estado do barco
+        /// @return O estado
+        int get_estado() {
+            return estado;
+        }
+
+        /// @brief Define a função de remoção deste evento
+        /// @return retorna um evento consequência
         Timed_Event *removal() {
             Simulação *simul = (Simulação*)this->queue;
-
-            int estado = 0;
             int tempo = 0;
             switch(this->estado) {
-                case 0:
+                case 0: // tá no porto 0
                     tempo = simul->Distribuições.travessia->generate();
                     this->embarcados += min(50, simul->pessoas[0]);
                     simul->pessoas[0] -= this->embarcados;
-                    estado = 1;
                     break;
 
-                case 1:
+                case 1: // indo porto 1
                     this->embarcados = 0;
                     tempo = 20;
-                    estado = 2;
                     break;
 
-                case 2:
+                case 2: // tá no porto 1
+                    tempo = simul->Distribuições.travessia->generate();
                     this->embarcados += min(50, simul->pessoas[1]);
                     simul->pessoas[1] -= this->embarcados;
-                    estado = 3;
                     break;
 
-                case 3:
+                case 3: // indo porto 0
                     this->embarcados = 0;
                     tempo = 20;
-                    estado = 4;
                     break;
 
                 default:
                     break;
             }
             
-            Viagem *novo = new Viagem(simul, this->time+tempo, estado);
+            Viagem *novo = new Viagem(simul, this->time+tempo, (this->estado+1)%4, this->embarcados);
             simul->insert(novo);
             return novo;
         };
@@ -104,9 +108,13 @@ class Chegada : public Timed_Event
         int porto;
 
     public:
-        Chegada(Simulação *contexto, double tempo, int porto) : Timed_Event(contexto, tempo) {}
+        Chegada(Simulação *contexto, double tempo, int porto) : Timed_Event(contexto, tempo) {
+            this->porto = porto;
+        }
         ~Chegada(){}
 
+        /// @brief Define a função de remoção deste evento
+        /// @return retorna um evento consequência
         Timed_Event *removal() {
             // Este casting works por causa que simulation é uma fila.
             Simulação *simul = (Simulação*) this->queue;

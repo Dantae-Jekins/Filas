@@ -34,11 +34,11 @@ class Timed_Queue
         /// @param time  Parâmetro para posicionar ordenadamente na fila
         void insert(Timed_Event *event) {
             Timed_Event_Node *new_Node = new Timed_Event_Node();
-            double new_time = event->get_Time();
+            double new_time = event->get_time();
             new_Node->content = event;
             new_Node->time = new_time;
 
-            // Preenche a raiz
+            // Caso 1 Preenche a raiz
             if (this->root == NULL) {
                 this->root = new_Node;
                 new_Node->next = NULL;
@@ -46,27 +46,28 @@ class Timed_Queue
                 return;
             }
 
-            // Caso específico
-            if (root->time >= new_time) {
-                root->prev = new_Node;
-                new_Node->next = root;
-                new_Node->prev = NULL;
-                root = new_Node;
-                
-            } else { 
-                Timed_Event_Node *aux = this->root;
-                while (aux->time <= new_time) {
-                    if(aux->next == NULL)
-                        break;
-                    aux = aux->next;
-                }   
-                Timed_Event_Node *tmp = aux->next;
-                new_Node->prev = aux;
-                aux->next = new_Node;
-                new_Node->next = tmp;
-                if (tmp != NULL) 
-                    tmp->prev = new_Node;
-            }
+            // Caso 2 existe raíz
+            Timed_Event_Node *aux = this->root;
+            while (aux->time < new_time) {
+                if(aux->next == NULL) {
+                    // chegou ao final sem números maiores posiciona
+                    // no final da lista
+                    new_Node->prev = aux;
+                    new_Node->next = NULL;
+                    aux->next = new_Node;
+                    return;
+                }
+                aux = aux->next;
+            }   
+
+            // encontrou um número maior posiciona antes
+            new_Node->prev = aux->prev;
+            new_Node->next = aux;
+
+            if(aux->prev != NULL) { aux->prev->next = new_Node; }
+            else { root = new_Node; } // esses dois if são "iguais"
+            aux->prev = new_Node;
+            return;
         };
 
 
@@ -100,18 +101,7 @@ class Timed_Queue
         /// @brief Remove o primeiro elemento da fila
         /// @return A função de remoção do evento removido
         Timed_Event *pop() {
-            if (this->root == NULL) 
-                return NULL;
-            
-            Timed_Event_Node *aux = root;
-            Timed_Event *aux2 = root->content;
-            if (this->root->next != NULL) 
-                root->next->prev = NULL;
-            
-
-            root = root->next;
-            delete aux;
-            return aux2->removal();
+            return this->remove(this->root->content);
         };
 
 
