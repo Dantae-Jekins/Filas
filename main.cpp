@@ -44,30 +44,23 @@ int main() {
     Simulação simul(0, chegada21_06, viagem18_06);
 
     // Define os eventos
-    struct barcos{
-        Viagem *atual = 0;
-        Viagem *prox = 0;
-    } Barcos[4];
+    Viagem *Barcos[4];
+    Chegada *Chegadas[2];
 
-    struct chegadas{
-        Chegada *atual = 0;
-        Chegada *prox = 0;
-    } Chegadas[2];
-
-    Barcos[0].atual = new Viagem(&simul, simul.time+20, 0);
-    Barcos[1].atual = new Viagem(&simul, simul.time+40, 0);
-    Barcos[2].atual = new Viagem(&simul, simul.time+20, 2);
-    Barcos[3].atual = new Viagem(&simul, simul.time+40, 2);
-    Chegadas[0].atual = new Chegada(&simul, simul.time+5, 0);
-    Chegadas[1].atual = new Chegada(&simul, simul.time+5, 1);
+    Barcos[0] = new Viagem(&simul, simul.time+20, 0);
+    Barcos[1] = new Viagem(&simul, simul.time+40, 0);
+    Barcos[2] = new Viagem(&simul, simul.time+20, 2);
+    Barcos[3] = new Viagem(&simul, simul.time+40, 2);
+    Chegadas[0] = new Chegada(&simul, simul.time+5, 0);
+    Chegadas[1] = new Chegada(&simul, simul.time+5, 1);
 
     // Preenche a simulação
-    simul.insert(Barcos[0].atual);
-    simul.insert(Barcos[1].atual);
-    simul.insert(Barcos[2].atual);
-    simul.insert(Barcos[3].atual);
-    simul.insert(Chegadas[0].atual);
-    simul.insert(Chegadas[1].atual);
+    simul.insert(Barcos[0]);
+    simul.insert(Barcos[1]);
+    simul.insert(Barcos[2]);
+    simul.insert(Barcos[3]);
+    simul.insert(Chegadas[0]);
+    simul.insert(Chegadas[1]);
     simul.pessoas[0] = 0;
     simul.pessoas[1] = 0;
 
@@ -75,13 +68,23 @@ int main() {
     Timed_Event *prox;
     double time;
     while(simul.dia < 1) {
+        // Extrai evento atual e o próximo
         atual = simul.top();
         prox = simul.pop();
         time = atual->get_Time();
 
-        cout << simul.pessoas[0] <<" : " << time << endl;
+        // Registra os eventos do barco
+        for (u_int i = 0; i<4; i++) 
+            if (Barcos[i] == atual) 
+                Barcos[i] = (Viagem*)prox;
+    
+        // Registra os eventos das chegadas
+        for (u_int i = 0; i<2; i++) 
+            if (Chegadas[i] == atual)
+                Chegadas[i] = (Chegada*)prox;
 
-        // Extrai resto e inteiro da divisão
+        // Divide pela quantidade de minutos do dia.
+        simul.time = time;
         simul.dia = (int)time/1440;
         int periodo = (int)time%1440;
         if (0 <= periodo && periodo < 360) {
@@ -112,7 +115,7 @@ int main() {
             simul.Distribuições.chegada = &chegada21_06;
             simul.Distribuições.travessia = &viagem18_06;
         }
-        simul.time = time;
+
         delete atual;
     };
     simul.free();

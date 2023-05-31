@@ -127,9 +127,11 @@ class Timed_Queue
 
         /// @brief Libera toda a memória e consome os eventos
         void free() {
-            for(Timed_Event_Node *i=root, *j=root->next; i!= NULL; i = j, j=i->next) {
+            for(Timed_Event_Node *i=root, *j=root->next; i!= NULL;) {
+                j = i->next;
                 delete i->content;
                 delete i;
+                i = j;
             }
             this->root=0;
         }

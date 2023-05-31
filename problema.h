@@ -43,7 +43,7 @@ class Viagem : public Timed_Event
 {
     private:
         int embarcados;
-        int estado; // 0 p0, 1 >p1, 2 p1, 3 >p0 
+        int estado;  
 
     public:                                                    
         // Um anão vale por meia pessoa?
