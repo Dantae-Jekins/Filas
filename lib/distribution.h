@@ -5,6 +5,8 @@
 #define POSSIBLE_VALUES 100  // Valores aplicáveis
 #include<math.h>
 #include<random>
+#include<ctime>
+#include<cstdlib>
 
 namespace Distributions
 {
@@ -12,9 +14,9 @@ namespace Distributions
     {
     private:
 
-        float desvio;
-        float media;
-        float table[RANDOM_QUANTITY]; 
+        double desvio;
+        double media;
+        double table[RANDOM_QUANTITY]; 
 
 
     public:
@@ -22,7 +24,7 @@ namespace Distributions
         /// @brief Construtor da distribuição normal
         /// @param media média da distribuição
         /// @param desvio desvio da distribuição
-        Normal(float media, float desvio) {
+        Normal(double media, double desvio) {
             // Prepara variáveis
             this->desvio = desvio;
             this->media = media;
@@ -64,7 +66,7 @@ namespace Distributions
 
         /// @brief Gera um número aleatório conforme esta distribuição
         /// @return Retorna um número aleatório dentro de 4 desvios padrão.
-        float generate() {
+        double generate() {
             u_int random_index = std::rand()%RANDOM_QUANTITY;
             if(std::rand()%2 == 1) {
                 return this->media + this->table[random_index]*this->desvio;

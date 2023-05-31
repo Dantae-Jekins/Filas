@@ -18,7 +18,7 @@ class Timed_Event
             this->time = time;
         }
 
-        double getTime() {
+        double get_Time() {
             return this->time;
         }
 
