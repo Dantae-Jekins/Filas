@@ -27,11 +27,11 @@ class Simulação : public Timed_Queue
         /// @param time Tempo atual da simulação
         /// @param dist_0 Distribuição de travessia
         /// @param dist_1 Distribuição de chegada
-        Simulação(double time, Distributions::Normal travessia, Distributions::Normal chegada):Timed_Queue(){
+        Simulação(double time, Distributions::Normal *travessia, Distributions::Normal *chegada):Timed_Queue(){
             this->time = time;
             this->dia = 0;
-            this->Distribuições.travessia = &travessia;
-            this->Distribuições.chegada = &chegada;
+            this->Distribuições.travessia = travessia;
+            this->Distribuições.chegada = chegada;
         };
     
         ~Simulação(){};
@@ -131,6 +131,7 @@ class Chegada : public Timed_Event
             return nova;
         };
 
+        /// @brief Define a função de inserção deste evento
         void insertion() {};
 };
 

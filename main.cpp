@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include <stdio.h>
 #include "problema.h"
 
 using namespace std;
@@ -18,7 +19,7 @@ int main() {
     Distributions::Normal viagem18_06(18, 4);
     
     // Preparar dia 0
-    Simulação simul(0, viagem18_06, chegada21_06);
+    Simulação simul(0, &viagem18_06, &chegada21_06);
 
     // Define os eventos
     Viagem *Barcos[4];
@@ -44,15 +45,23 @@ int main() {
     Timed_Event *atual;
     Timed_Event *prox;
     double time;
+
+    // Valores para coleta de dados
+    u_int  pessoas_totais0 = 0;
+    u_int  pessoas_totais1 = 0;
+    double pess_medio0= 0;
+    double pess_medio1= 0;
     double time_medio0= 0;
     double time_medio1= 0;
+    int pop_prev1  = 0;
+    int pop_prev0  = 0;
 
     while(simul.dia < 1) {
         // Extrai evento atual e o próximo
         atual = simul.top();
         prox = simul.pop();
         time = atual->get_time();
-
+        printf("\e[0;31m");
         // Registra os eventos do barco
         for (u_int i = 0; i<4; i++) {
             if (Barcos[i] == atual) {
@@ -116,18 +125,31 @@ int main() {
                 }
             }
         }
+        
+        printf("\e[0m");
+        pessoas_totais0 += max( 0, simul.pessoas[0] - pop_prev0);
+        pessoas_totais1 += max( 0, simul.pessoas[1] - pop_prev1);
 
         // atualiza a média
         double intervalo = time - simul.time;
-        time_medio0 = time_medio0 * (simul.time / time) + simul.pessoas[0]*intervalo / time;
-        time_medio1 = time_medio1 * (simul.time / time) + simul.pessoas[1]*intervalo / time;
-
+        time_medio0 = time_medio0 * (simul.time / time) + pop_prev0*intervalo / time;
+        time_medio1 = time_medio1 * (simul.time / time) + pop_prev1*intervalo / time;
+        /* TODO é complicado.
+        if (pessoas_totais0!=0) 
+            pess_medio0 = pess_medio0 * (simul.pessoas[0] / pessoas_totais0) + intervalo*simul.pessoas[0] / pessoas_totais0;
+        if (pessoas_totais1!=0)
+            pess_medio1 = pess_medio1 * (simul.pessoas[1] / pessoas_totais1) + intervalo*simul.pessoas[1] / pessoas_totais1;
+        */
         // Registra informações sobre o evento
-        cout << "\nTempo { Total : " << time << ", Hora  : "<< (int)(time/60)%24<< "}";
+        cout << "\nTempo { Total : " << time << ", Hora  : "<< (int)(time/60)%24<< " }";
         cout << "\n\n  Porto 0 -> População       : " << simul.pessoas[0];
-        cout << "\n             Pessoas por min : " <<  time_medio0;
+        cout << "\n             Tamanho Médio   : " <<  time_medio0;
+        //cout << "\n             Duração Média   : " <<  pess_medio0;
+        cout << "\n             Tamanho Total   : " <<  pessoas_totais0 << endl;
         cout << "\n  Porto 1 -> População       : " << simul.pessoas[1];
-        cout << "\n             Pessoas por min : " <<  time_medio1 << "\n\n";
+        cout << "\n             Tamanho Médio   : " <<  time_medio1;
+        //cout << "\n             Duração Média   : " <<  pess_medio1;
+        cout << "\n             Tamanho Total   : " <<  pessoas_totais1 << "\n\n";
  
 
         // Divide pela quantidade de minutos do dia.e
@@ -162,6 +184,8 @@ int main() {
             simul.Distribuições.chegada = &chegada21_06;
             simul.Distribuições.travessia = &viagem18_06;
         }
+        pop_prev0 = simul.pessoas[0];
+        pop_prev1 = simul.pessoas[1];
 
         delete atual;
     };
