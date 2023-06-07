@@ -27,11 +27,11 @@ class Simulação : public Timed_Queue
         /// @param time Tempo atual da simulação
         /// @param dist_0 Distribuição de travessia
         /// @param dist_1 Distribuição de chegada
-        Simulação(double time, Distributions::Normal dist_0, Distributions::Normal dist_1):Timed_Queue(){
+        Simulação(double time, Distributions::Normal travessia, Distributions::Normal chegada):Timed_Queue(){
             this->time = time;
             this->dia = 0;
-            this->Distribuições.travessia = &dist_0;
-            this->Distribuições.chegada = &dist_1;
+            this->Distribuições.travessia = &travessia;
+            this->Distribuições.chegada = &chegada;
         };
     
         ~Simulação(){};
@@ -68,7 +68,7 @@ class Viagem : public Timed_Event
             switch(this->estado) {
                 case 0: // tá no porto 0
                     tempo = simul->Distribuições.travessia->generate();
-                    this->embarcados += min(50, simul->pessoas[0]);
+                    this->embarcados = min(50, simul->pessoas[0]);
                     simul->pessoas[0] -= this->embarcados;
                     break;
 
@@ -79,7 +79,7 @@ class Viagem : public Timed_Event
 
                 case 2: // tá no porto 1
                     tempo = simul->Distribuições.travessia->generate();
-                    this->embarcados += min(50, simul->pessoas[1]);
+                    this->embarcados = min(50, simul->pessoas[1]);
                     simul->pessoas[1] -= this->embarcados;
                     break;
 
@@ -113,12 +113,17 @@ class Chegada : public Timed_Event
         }
         ~Chegada(){}
 
+        /// @brief Retrona o porto
+        int get_port(){
+            return porto;
+        }
+
         /// @brief Define a função de remoção deste evento
         /// @return retorna um evento consequência
         Timed_Event *removal() {
             // Este casting works por causa que simulation é uma fila.
             Simulação *simul = (Simulação*) this->queue;
-            int chegada = round(simul->Distribuições.chegada->generate());
+            int chegada = max( 0.0, round(simul->Distribuições.chegada->generate()));
             simul->pessoas[this->porto] += chegada;
 
             Chegada *nova = new Chegada(simul, this->time+5, this->porto);

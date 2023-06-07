@@ -4,28 +4,6 @@
 
 using namespace std;
 using namespace Distributions;
-
-/* CHEGADA DE PESSOAS
-6h – 10h
-média 25 e desvio padrão 2
-
-10h – 12h
-média 10 e desvio padrão 3
-
-12h – 15h
-média 15 e desvio padrão 2
-
-15h – 18h
-média 10 e desvio padrão 2
-
-18h – 21h
-média 20 e desvio padrão 4
-
-21h – 6h
-média 4 e desvio padrão 3
-
-*/
-
 int main() {
     srand(time(NULL));
     
@@ -36,11 +14,11 @@ int main() {
     Distributions::Normal chegada15_18(10, 2);
     Distributions::Normal chegada18_21(20, 4);
     Distributions::Normal chegada21_06(4, 3);
-    Distributions::Normal viagem06_18(15, 3);
-    Distributions::Normal viagem18_06(20, 5);
+    Distributions::Normal viagem06_18(12, 2); // alterado
+    Distributions::Normal viagem18_06(18, 4);
     
     // Preparar dia 0
-    Simulação simul(0, chegada21_06, viagem18_06);
+    Simulação simul(0, viagem18_06, chegada21_06);
 
     // Define os eventos
     Viagem *Barcos[4];
@@ -66,6 +44,9 @@ int main() {
     Timed_Event *atual;
     Timed_Event *prox;
     double time;
+    double time_medio0= 0;
+    double time_medio1= 0;
+
     while(simul.dia < 1) {
         // Extrai evento atual e o próximo
         atual = simul.top();
@@ -77,23 +58,23 @@ int main() {
             if (Barcos[i] == atual) {
                 switch(Barcos[i]->get_estado()) {
                     case 0:
-                        cout << "\nEvento Barco Zarpando de 0  | Tempo:" << time;
+                        cout << "\nEvento Barco Zarpando de 0";
                         break;
                     
                     case 1:
-                        cout << "\nEvento Barco Chegando  em 1 | Tempo:" << time;
+                        cout << "\nEvento Barco Chegando  em 1";
                         break;
 
                     case 2:
-                        cout << "\nEvento Barco Zarpando de 1  | Tempo:" << time;
+                        cout << "\nEvento Barco Zarpando de 1";
                         break;
 
                     case 3:
-                        cout << "\nEvento Barco Chegando  em 0 | Tempo:" << time;
+                        cout << "\nEvento Barco Chegando  em 0";
                         break;
                     
                     default:
-                        cout << "EERO ERRRRRRRRO AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+                        cout << "ERRO";
                         break;
                 }
                 Barcos[i] = (Viagem*)prox;
@@ -104,26 +85,52 @@ int main() {
         for (u_int i = 0; i<2; i++) {
             if (Chegadas[i] == atual) {
                 Chegadas[i] = (Chegada*)prox;
-                cout << "\nEvento Chegada              | Tempo:" << time;
+                cout << "\nEvento Chegada " << Chegadas[i]->get_port();
             }
         }
 
-        /* Força saída de portos
-        for (u_int index = 0; index < 2; index++) {
-            if (simul.pessoas[index] >= 50) {
-                for (int i = 0; i<4; i++) {
-                    if (Barcos[i]->get_estado() == index*2)  {
-                        Viagem *prox2 = (Viagem*)simul.remove(Barcos[i]);
+        // Força a saída do porto
+        for (int i = 0; i < 2; i++ ) {
+            if (simul.pessoas[i] >= 50) {
+                for (int j = 0; j<4; j++) {
+                    if (Barcos[j]->get_estado() == i*2) {
+                        Viagem *prox2 = (Viagem*)simul.remove(Barcos[j]);
+                        switch(Barcos[j]->get_estado()) {
+                            case 0:
+                                cout << "\nEvento Barco Zarpando de 0 (Forçado)";
+                                break;
 
-                        Barcos[i] = prox2;
-                        simul.insert(prox2);
+                            case 2:
+                                cout << "\nEvento Barco Zarpando de 1 (Forçado)";
+                                break;
+
+                            default:
+                                cout << "ERRO";
+                                break;
+                        }
+                        delete Barcos[j];
+                        Barcos[j] = prox2;
+                        if (simul.pessoas[i] < 50)
+                            break;
                     }
                 }
             }
-        }*/
+        }
 
+        // atualiza a média
+        double intervalo = time - simul.time;
+        time_medio0 = time_medio0 * (simul.time / time) + simul.pessoas[0]*intervalo / time;
+        time_medio1 = time_medio1 * (simul.time / time) + simul.pessoas[1]*intervalo / time;
 
-        // Divide pela quantidade de minutos do dia.
+        // Registra informações sobre o evento
+        cout << "\nTempo { Total : " << time << ", Hora  : "<< (int)(time/60)%24<< "}";
+        cout << "\n\n  Porto 0 -> População       : " << simul.pessoas[0];
+        cout << "\n             Pessoas por min : " <<  time_medio0;
+        cout << "\n  Porto 1 -> População       : " << simul.pessoas[1];
+        cout << "\n             Pessoas por min : " <<  time_medio1 << "\n\n";
+ 
+
+        // Divide pela quantidade de minutos do dia.e
         simul.time = time;
         simul.dia = (int)time/1440;
         int periodo = (int)time%1440;
@@ -161,3 +168,15 @@ int main() {
     simul.free();
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
