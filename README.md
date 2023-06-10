@@ -32,7 +32,7 @@ Simulação simul(0, &viagem18_06, &chegada21_06);
 
 O arquivo `problema.h` conta com `class Viagem` para a definição de viagme em nosso cenário. Uma viagem pode ser definida como um serie de eventos que ocorrem de sequencialmente em relação ao horário. Tais eventos que ocorrem com base na probabilidade daquilo ocorrer naquele horário. A viagem possui seus estados que vão variar conforme o tempo.
 
-A função deve receber seu contexto de atuação, no caso a simulação vigente. Na segunda posição, a simulação deve receber o tempo, 0 (definido anteriormente no tempo da simulação acima) mais 20. Na próxima posição, é recebido o estado atual do barco, 0 que dizer que ele se encontra no porto 0, o estado 1 indica que obarco está na rota ao porto 1, o estado 2 indica que o barco está no porto 1 e o estado 3 indica que o barco se encontra na rota ao porto 0. E por fim, o tanto de embarcados no momento inicial da definição do parco, 0 embarcados.
+A função deve receber seu contexto de atuação, no caso a simulação vigente. Na segunda posição, a viagem deve receber o tempo, 0 (definido anteriormente no tempo da simulação acima) mais 20. Na próxima posição, é recebido o estado atual do barco, 0 que dizer que ele se encontra no porto 0, o estado 1 indica que obarco está na rota ao porto 1, o estado 2 indica que o barco está no porto 1 e o estado 3 indica que o barco se encontra na rota ao porto 0. E por fim, o tanto de embarcados no momento inicial da definição do parco, 0 embarcados.
 
 A função defini um barco (o barco viaja).
 
@@ -40,7 +40,7 @@ A função defini um barco (o barco viaja).
 Barcos[0] = new Viagem(&simul, simul.time+20, 0, 0);
 ```
 
-Por fim a classe `class Chegada` de `problema.h`. Essa classe define o evento de chagadas.
+Por fim a classe `class Chegada` de `problema.h`. Essa classe define o evento de chagadas. Ela recebe na primeira posição o contexto, a simulação. Na segunda posição, a viagem deve receber o tempo, 0 (definido anteriormente no tempo da simulação acima) mais 5. E por fim, o porto monitorado, no caso o porto 1.
 
 ```c++
 Chegadas[1] = new Chegada(&simul, simul.time+5, 1);
