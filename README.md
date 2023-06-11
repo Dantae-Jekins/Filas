@@ -72,6 +72,10 @@ Resultado de uma simulação para um dia:
 
 `Evento Barco Chegando em 1` Quer dizer sobre a chegada do barco no porto 1 por exemplo.
 
+`Porto 0 -> População` se trata da quantidade de pessoas esperando no porto 0 para serem atravessadas. Após um evento de chegada, a população do porto cresce.
+
+
+
 ```
 Evento Chegada 1
 Tempo { Total : 5, Hora  : 0 }
