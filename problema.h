@@ -12,7 +12,7 @@ class Chegada;
 
 
 /// @brief Classe representando a simulação
-class Simulação : public Timed_Queue 
+class Simulacao : public Timed_Queue 
 {
     public:
         double time;
@@ -21,20 +21,20 @@ class Simulação : public Timed_Queue
         struct {
             Distributions::Normal *travessia;
             Distributions::Normal *chegada;
-        } Distribuições;
+        } Distribuicoes;
 
         /// @brief Construtor que herda da fila temporal
         /// @param time Tempo atual da simulação
         /// @param dist_0 Distribuição de travessia
         /// @param dist_1 Distribuição de chegada
-        Simulação(double time, Distributions::Normal *travessia, Distributions::Normal *chegada):Timed_Queue(){
+        Simulacao(double time, Distributions::Normal *travessia, Distributions::Normal *chegada):Timed_Queue(){
             this->time = time;
             this->dia = 0;
-            this->Distribuições.travessia = travessia;
-            this->Distribuições.chegada = chegada;
+            this->Distribuicoes.travessia = travessia;
+            this->Distribuicoes.chegada = chegada;
         };
     
-        ~Simulação(){};
+        ~Simulacao(){};
 };
 
 
@@ -48,7 +48,7 @@ class Viagem : public Timed_Event
     public:                                                    
         // Um anão vale por meia pessoa?
         // Se sim o tipo deveria ser "double" e não "int". 
-        Viagem(Simulação *contexto, double tempo, int estado, int embarcados):Timed_Event(contexto, tempo) {
+        Viagem(Simulacao *contexto, double tempo, int estado, int embarcados):Timed_Event(contexto, tempo) {
             this->estado = estado;
         }
         ~Viagem(){}
@@ -63,11 +63,11 @@ class Viagem : public Timed_Event
         /// @brief Define a função de remoção deste evento
         /// @return retorna um evento consequência
         Timed_Event *removal() {
-            Simulação *simul = (Simulação*)this->queue;
+            Simulacao *simul = (Simulacao*)this->queue;
             int tempo = 0;
             switch(this->estado) {
                 case 0: // tá no porto 0
-                    tempo = simul->Distribuições.travessia->generate();
+                    tempo = simul->Distribuicoes.travessia->generate();
                     this->embarcados = min(50, simul->pessoas[0]);
                     simul->pessoas[0] -= this->embarcados;
                     break;
@@ -78,7 +78,7 @@ class Viagem : public Timed_Event
                     break;
 
                 case 2: // tá no porto 1
-                    tempo = simul->Distribuições.travessia->generate();
+                    tempo = simul->Distribuicoes.travessia->generate();
                     this->embarcados = min(50, simul->pessoas[1]);
                     simul->pessoas[1] -= this->embarcados;
                     break;
@@ -108,7 +108,7 @@ class Chegada : public Timed_Event
         int porto;
 
     public:
-        Chegada(Simulação *contexto, double tempo, int porto) : Timed_Event(contexto, tempo) {
+        Chegada(Simulacao *contexto, double tempo, int porto) : Timed_Event(contexto, tempo) {
             this->porto = porto;
         }
         ~Chegada(){}
@@ -122,8 +122,8 @@ class Chegada : public Timed_Event
         /// @return retorna um evento consequência
         Timed_Event *removal() {
             // Este casting works por causa que simulation é uma fila.
-            Simulação *simul = (Simulação*) this->queue;
-            int chegada = max( 0.0, round(simul->Distribuições.chegada->generate()));
+            Simulacao *simul = (Simulacao*) this->queue;
+            int chegada = max( 0.0, round(simul->Distribuicoes.chegada->generate()));
             simul->pessoas[this->porto] += chegada;
 
             Chegada *nova = new Chegada(simul, this->time+5, this->porto);

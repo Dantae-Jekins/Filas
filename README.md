@@ -1,7 +1,9 @@
 # Filas
 
 A cidade Belzonte é cortada por um lago formado a partir de uma represa, esse lago separa duas regiões importantes da cidade, assim, a prefeitura precisou desenvolver um meio de transporte para pedestres, a decisão foi colocar lanchas com 50 lugares.
+
 O tempo de travessia de entre as duas regiões entre 6 horas e 18 horas segue uma distribuição normal de média 15 minutos e desvio padrão 3 minutos e no período entre 18 horas e 6 horas segue uma distribuição normal de média 20 minutos e desvio padrão 5 minutos.
+
 O horário de funcionamento da lancha é de 24 horas, mas há blocos de horários com demandas diferentes, as demandas estão na tabela.
 
 ### Horário
@@ -46,3 +48,94 @@ Por fim a classe `class Chegada` de `problema.h`. Essa classe define o evento de
 Chegadas[1] = new Chegada(&simul, simul.time+5, 1);
 ```
 
+---
+
+Na pasta `lib` estão as estruturas para a composição das classes do problema
+
+Dentro do arquivo `event.h` há a definição de um evento. O evento é a realização de determinada ação em um tempo.
+
+O arquivo `queue.h` possui a classe que define uma fila de eventos. A fila se trata de uma lista ligada, com os métodos necessários para gerenciar tal evento. Adicionar, remover, ter acesso ao primeiro evento (o próximo a ser executado) e remover o primeiro elemento (para simbolizar que foi executado). O evento é adicionado na fila, ordenado pelo horário.
+
+Por fim, o arquivo `distribution.h` define a classe da distribuição. A distribuição é criada contendo a média e o desvio padrão. O método `generate()` gera um número aleatório enviesado pela distribuição.
+
+---
+
+Compilação e execução:
+```bash
+g++ main.cpp -o main
+./main
+```
+
+Resultado de uma simulação para um dia:
+
+```
+Evento Chegada 1
+Tempo { Total : 5, Hora  : 0 }
+
+  Porto 0 -> População       : 0
+             Tamanho Médio   : 0
+             Tamanho Total   : 0
+
+  Porto 1 -> População       : 0
+             Tamanho Médio   : 0
+             Tamanho Total   : 0
+
+Evento Chegada 0
+Tempo { Total : 5, Hora  : 0 }
+
+  Porto 0 -> População       : 5
+             Tamanho Médio   : 0
+             Tamanho Total   : 5
+
+  Porto 1 -> População       : 0
+             Tamanho Médio   : 0
+             Tamanho Total   : 0
+
+Evento Chegada 0
+Tempo { Total : 10, Hora  : 0 }
+
+  Porto 0 -> População       : 5
+             Tamanho Médio   : 2.5
+             Tamanho Total   : 5
+
+  Porto 1 -> População       : 0
+             Tamanho Médio   : 0
+             Tamanho Total   : 0
+
+Evento Chegada 1
+Tempo { Total : 10, Hora  : 0 }
+
+  Porto 0 -> População       : 5
+             Tamanho Médio   : 2.5
+             Tamanho Total   : 5
+
+  Porto 1 -> População       : 10
+             Tamanho Médio   : 0
+             Tamanho Total   : 10
+```
+
+Após 23 horas:
+
+```
+Evento Barco Chegando  em 1
+Tempo { Total : 1437, Hora  : 23 }
+
+  Porto 0 -> População       : 0
+             Tamanho Médio   : 140.882
+             Tamanho Total   : 3533
+
+  Porto 1 -> População       : 4
+             Tamanho Médio   : 165.306
+             Tamanho Total   : 3578
+
+Evento Chegada 0
+Tempo { Total : 1440, Hora  : 0 }
+
+  Porto 0 -> População       : 4
+             Tamanho Médio   : 140.589
+             Tamanho Total   : 3537
+
+  Porto 1 -> População       : 4
+             Tamanho Médio   : 164.97
+             Tamanho Total   : 3578
+```

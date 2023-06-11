@@ -8,7 +8,7 @@ using namespace Distributions;
 int main() {
     srand(time(NULL));
     
-    // Distribuições 
+    // Distribuicoes 
     Distributions::Normal chegada06_10(25, 2);
     Distributions::Normal chegada10_12(10, 3);
     Distributions::Normal chegada12_15(15, 2);
@@ -19,7 +19,7 @@ int main() {
     Distributions::Normal viagem18_06(18, 4);
     
     // Preparar dia 0
-    Simulação simul(0, &viagem18_06, &chegada21_06);
+    Simulacao simul(0, &viagem18_06, &chegada21_06);
 
     // Define os eventos
     Viagem *Barcos[4];
@@ -157,32 +157,32 @@ int main() {
         simul.dia = (int)time/1440;
         int periodo = (int)time%1440;
         if (0 <= periodo && periodo < 360) {
-            simul.Distribuições.chegada = &chegada21_06;
-            simul.Distribuições.travessia = &viagem18_06;
+            simul.Distribuicoes.chegada = &chegada21_06;
+            simul.Distribuicoes.travessia = &viagem18_06;
         }
         else if(360 <= periodo && periodo < 600) {
-            simul.Distribuições.chegada = &chegada06_10;
-            simul.Distribuições.travessia = &viagem06_18;
+            simul.Distribuicoes.chegada = &chegada06_10;
+            simul.Distribuicoes.travessia = &viagem06_18;
         }
         else if (600 <= periodo && periodo < 720) {
-            simul.Distribuições.chegada = &chegada10_12;
-            simul.Distribuições.travessia = &viagem06_18;
+            simul.Distribuicoes.chegada = &chegada10_12;
+            simul.Distribuicoes.travessia = &viagem06_18;
         }
         else if (720 <= periodo && periodo < 900) {
-            simul.Distribuições.chegada = &chegada12_15;
-            simul.Distribuições.travessia = &viagem06_18;
+            simul.Distribuicoes.chegada = &chegada12_15;
+            simul.Distribuicoes.travessia = &viagem06_18;
         }
         else if (900 <= periodo && periodo < 1080){
-            simul.Distribuições.chegada = &chegada15_18;
-            simul.Distribuições.travessia = &viagem06_18;
+            simul.Distribuicoes.chegada = &chegada15_18;
+            simul.Distribuicoes.travessia = &viagem06_18;
         }
         else if (1080 <= periodo && periodo < 1260){
-            simul.Distribuições.chegada = &chegada18_21;
-            simul.Distribuições.travessia = &viagem18_06;
+            simul.Distribuicoes.chegada = &chegada18_21;
+            simul.Distribuicoes.travessia = &viagem18_06;
         }
         else if (1260 <= periodo && periodo < 1440){
-            simul.Distribuições.chegada = &chegada21_06;
-            simul.Distribuições.travessia = &viagem18_06;
+            simul.Distribuicoes.chegada = &chegada21_06;
+            simul.Distribuicoes.travessia = &viagem18_06;
         }
         pop_prev0 = simul.pessoas[0];
         pop_prev1 = simul.pessoas[1];
