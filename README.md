@@ -60,13 +60,17 @@ Por fim, o arquivo `distribution.h` define a classe da distribuição. A distrib
 
 ---
 
-Compilação e execução:
+Compilação e execução (LINUX: testado em Arch e Ubuntu):
 ```bash
 g++ main.cpp -o main
 ./main
 ```
 
 Resultado de uma simulação para um dia:
+
+`Evento Chegada 1` Quer dizer sobre a chegada de pessoas, no porto 1 por exemplo.
+
+`Evento Barco Chegando em 1` Quer dizer sobre a chegada do barco no porto 1 por exemplo.
 
 ```
 Evento Chegada 1
@@ -117,7 +121,7 @@ Tempo { Total : 10, Hora  : 0 }
 Após 23 horas:
 
 ```
-Evento Barco Chegando  em 1
+Evento Barco Chegando em 1
 Tempo { Total : 1437, Hora  : 23 }
 
   Porto 0 -> População       : 0
